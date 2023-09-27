@@ -9,12 +9,25 @@ services:
       - PUID=1000
       - PGID=1000
       - UMASK=002
-      - TZ=America/Vancouver
+      - TZ
     volumes:
       - /home/anton/jellyfin/config:/config
       - /home/anton/bucket/media:/data
     restart: unless-stopped
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ
+      - WEBUI_PORT=8080
+    volumes:
+      - /home/anton/qbittorrent/config:/config
+      - /home/anton/bucket/torrents:/downloads
+    network_mode: "container:gluetun"
+    restart: unless-stopped
   gluetun:
+    container_name: gluetun
     image: qmcgaw/gluetun
     cap_add:
       - NET_ADMIN
