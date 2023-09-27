@@ -6,6 +6,7 @@ services:
     image: ghcr.io/hotio/jellyfin
     ports:
       - "8096:8096"
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=1000
