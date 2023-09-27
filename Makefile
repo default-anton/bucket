@@ -13,6 +13,7 @@ make_dirs:
 .PHONY: deploy
 deploy:
 	@scp ./docker-compose.yml $(SSH_USER)@$(SSH_HOST):$(ROOT_DIR)/bucket/docker-compose.yml
+	@scp ./.envrc $(SSH_USER)@$(SSH_HOST):$(ROOT_DIR)/bucket/.env
 
 .PHONY: up
 up:
