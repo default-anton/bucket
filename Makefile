@@ -1,6 +1,7 @@
-ROOT_DIR := "/home/anton"
-SSH_USER := "anton"
-SSH_HOST := "10.0.0.124"
+ROOT_DIR ?= "/home/bucket"
+SSH_USER ?= "bucket"
+SSH_HOST ?= "127.0.0.1"
+SSH_PORT ?= "22"
 
 .PHONY: all
 all: make_dirs deploy up
