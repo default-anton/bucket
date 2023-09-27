@@ -14,3 +14,19 @@ services:
       - /home/anton/jellyfin/config:/config
       - /home/anton/bucket/media:/data
     restart: unless-stopped
+  gluetun:
+    image: qmcgaw/gluetun
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 8080:8080
+      - 6881:6881
+      - 6881:6881/udp
+    environment:
+      - VPN_SERVICE_PROVIDER=mullvad
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY
+      - WIREGUARD_ADDRESSES
+      - SERVER_COUNTRIES
+      - OWNED_ONLY
+    restart: unless-stopped
