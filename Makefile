@@ -3,18 +3,19 @@ SSH_USER ?= "bucket"
 SSH_HOST ?= "127.0.0.1"
 SSH_PORT ?= "22"
 
-.PHONY: all
+.PHONY: all make_dirs deploy up ssh
+
 all: make_dirs deploy up
 
-.PHONY: make_dirs
 make_dirs:
-	ssh $(SSH_USER)@$(SSH_HOST) "mkdir -p $(ROOT_DIR)/bucket/{torrents,media}/{movies,tv}"
+	@ssh $(SSH_USER)@$(SSH_HOST) "mkdir -p $(ROOT_DIR)/bucket/{torrents,media}/{movies,tv}"
 
-.PHONY: deploy
 deploy:
 	@scp ./docker-compose.yml $(SSH_USER)@$(SSH_HOST):$(ROOT_DIR)/bucket/docker-compose.yml
 	@scp ./.envrc $(SSH_USER)@$(SSH_HOST):$(ROOT_DIR)/bucket/.env
 
-.PHONY: up
 up:
-	ssh $(SSH_USER)@$(SSH_HOST) "cd $(ROOT_DIR)/bucket && docker compose up -d"
+	@ssh $(SSH_USER)@$(SSH_HOST) "cd $(ROOT_DIR)/bucket && docker compose up -d"
+
+ssh:
+	@ssh $(SSH_USER)@$(SSH_HOST) -p $(SSH_PORT)
