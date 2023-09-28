@@ -4,12 +4,20 @@ services:
   jellyfin:
     container_name: jellyfin
     image: ghcr.io/hotio/jellyfin
+    # https://jellyfin.org/docs/general/administration/hardware-acceleration/amd
+    group_add:
+      - "109" # render host group id
+      - "44" # video host group id
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+      - /dev/kfd:/dev/kfd
     ports:
       - "8096:8096"
     environment:
       - PUID=1000
       - PGID=1000
       - UMASK=002
+      - ROC_ENABLE_PRE_VEGA=1
       - TZ
     volumes:
       - /home/anton/jellyfin/config:/config
@@ -41,6 +49,18 @@ services:
       - /home/anton/bucket:/data
     network_mode: "container:gluetun"
     restart: unless-stopped
+  prowlarr:
+    container_name: prowlarr
+    image: ghcr.io/hotio/prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ
+    volumes:
+      - /home/anton/prowlarr/config:/config
+    network_mode: "container:gluetun"
+    restart: unless-stopped
   qbittorrent:
     container_name: qbittorrent
     image: lscr.io/linuxserver/qbittorrent:latest
@@ -66,6 +86,7 @@ services:
       - 8080:8080
       - 6881:6881
       - 6881:6881/udp
+      - 9696:9696
     environment:
       - VPN_SERVICE_PROVIDER=mullvad
       - VPN_TYPE=wireguard
