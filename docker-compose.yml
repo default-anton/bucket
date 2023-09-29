@@ -26,8 +26,6 @@ services:
   jellyseerr:
     container_name: jellyseerr
     image: ghcr.io/hotio/jellyseerr
-    ports:
-      - "5055:5055"
     environment:
       - PUID=1000
       - PGID=1000
@@ -35,6 +33,7 @@ services:
       - TZ
     volumes:
       - /home/anton/jellyseerr/config:/config
+    network_mode: "container:gluetun"
     restart: unless-stopped
   sonarr:
     container_name: sonarr
@@ -94,6 +93,7 @@ services:
     cap_add:
       - NET_ADMIN
     ports:
+      - 5055:5055
       - 7878:7878
       - 8989:8989
       - 8080:8080
