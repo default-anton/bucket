@@ -18,4 +18,4 @@ up:
 	@ssh $(SSH_USER)@$(SSH_HOST) "cd $(ROOT_DIR)/bucket && docker compose up -d"
 
 ssh:
-	@ssh $(SSH_USER)@$(SSH_HOST) -p $(SSH_PORT)
+	@ssh $(SSH_USER)@$(SSH_HOST) -p $(SSH_PORT) -t "cd $(ROOT_DIR)/bucket; bash -i"
