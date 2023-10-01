@@ -95,17 +95,6 @@ services:
     labels:
       - "autoheal=true"
     healthcheck: *default_healthcheck
-  flaresolverr:
-    container_name: flaresolverr
-    image: ghcr.io/flaresolverr/flaresolverr
-    environment:
-      - LOG_LEVEL=info
-      - TZ
-    network_mode: "container:gluetun"
-    restart: unless-stopped
-    labels:
-      - "autoheal=true"
-    healthcheck: *default_healthcheck
   qbittorrent:
     container_name: qbittorrent
     image: lscr.io/linuxserver/qbittorrent:latest
@@ -134,7 +123,6 @@ services:
       - 7878:7878 # radarr
       - 8989:8989 # sonarr
       - 8080:8080 # qbittorrent
-      - 8191:8191 # flaresolverr
       - 9696:9696 # prowlarr
     environment:
       - VPN_SERVICE_PROVIDER=mullvad
