@@ -11,11 +11,13 @@ make_dirs:
 	@ssh $(SSH_USER)@$(SSH_HOST) -p $(SSH_PORT) "mkdir -p $(ROOT_DIR)/bucket/{torrents,media}/{movies,tv}"
 
 deploy:
-	@scp -P $(SSH_PORT) ./docker-compose.yml $(SSH_USER)@$(SSH_HOST):$(ROOT_DIR)/bucket/docker-compose.yml
-	@scp -P $(SSH_PORT) ./.envrc $(SSH_USER)@$(SSH_HOST):$(ROOT_DIR)/bucket/.env
+	@scp -P $(SSH_PORT) \
+		./* \
+		./.envrc \
+		$(SSH_USER)@$(SSH_HOST):$(ROOT_DIR)/bucket/
 
 up:
-	@ssh $(SSH_USER)@$(SSH_HOST) -p $(SSH_PORT) "cd $(ROOT_DIR)/bucket && docker compose up -d --remove-orphans"
+	@ssh $(SSH_USER)@$(SSH_HOST) -p $(SSH_PORT) "cd $(ROOT_DIR)/bucket && ./deploy.sh"
 
 ssh:
-	@ssh $(SSH_USER)@$(SSH_HOST) -p $(SSH_PORT) -t "cd $(ROOT_DIR)/bucket; bash -i"
+	@ssh $(SSH_USER)@$(SSH_HOST) -p $(SSH_PORT) -t "cd $(ROOT_DIR)/bucket && bash -i"
