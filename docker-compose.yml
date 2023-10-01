@@ -90,7 +90,7 @@ services:
     healthcheck: *default_healthcheck
   prowlarr:
     container_name: prowlarr
-    image: ghcr.io/hotio/prowlarr
+    image: ghcr.io/hotio/prowlarr:nightly
     environment:
       - PUID=1000
       - PGID=1000
