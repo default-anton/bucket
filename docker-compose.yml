@@ -149,3 +149,17 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
+  filebrowser:
+    image: filebrowser/filebrowser:s6
+    container_name: filebrowser
+    volumes:
+      - /home/anton/bucket/torrents:/srv
+      - /home/anton/bucket/filebrowser/database:/database
+      - /home/anton/bucket/filebrowser/config:/config
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ
+    ports:
+      - "8081:80"
+    restart: unless-stopped
