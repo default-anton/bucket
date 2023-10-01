@@ -130,12 +130,12 @@ services:
     cap_add:
       - NET_ADMIN
     ports:
-      - 5055:5055
-      - 7878:7878
-      - 8989:8989
-      - 8080:8080
-      - 8191:8191
-      - 9696:9696
+      - 5055:5055 # jellyseerr
+      - 7878:7878 # radarr
+      - 8989:8989 # sonarr
+      - 8080:8080 # qbittorrent
+      - 8191:8191 # flaresolverr
+      - 9696:9696 # prowlarr
     environment:
       - VPN_SERVICE_PROVIDER=mullvad
       - VPN_TYPE=wireguard
