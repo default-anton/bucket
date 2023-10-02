@@ -172,9 +172,9 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ
-      - RAPIRA_BOOKS_DOWNLOAD_TO=/downloads
+      - RAPIRA_BOOKS_DOWNLOAD_TO=/data/torrents/books/inbox
       - RAPIRA_BOOKS_TELEGRAM_BOT_TOKEN
       - RAPIRA_BOOKS_USERS
     volumes:
-      - /home/anton/bucket/torrents/books/inbox:/downloads
+      - /home/anton/bucket/torrents/books:/data/torrents/books
     restart: unless-stopped
