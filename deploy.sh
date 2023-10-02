@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-docker compose up -d --remove-orphans
+(cd rapirabooks && git clean -fdx && git pull)
+mv .envrc .env
+docker compose up --build -d --remove-orphans
 
 start_time=$(date +%s)
 end_time=$((start_time + 180))

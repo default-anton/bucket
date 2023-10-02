@@ -163,3 +163,18 @@ services:
     ports:
       - "8081:80"
     restart: unless-stopped
+  rapirabooks:
+    container_name: rapirabooks
+    build:
+      context: ./rapirabooks
+      dockerfile: Dockerfile
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - RAPIRA_BOOKS_DOWNLOAD_TO=/downloads
+      - RAPIRA_BOOKS_TELEGRAM_BOT_TOKEN
+      - RAPIRA_BOOKS_USERS
+      - TZ
+    volumes:
+      - /home/anton/bucket/torrents/books/inbox:/downloads
+    restart: unless-stopped
