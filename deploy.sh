@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-(cd rapirabooks && git clean -fdx && git pull)
+(cd rapirabooks && git clean -fdx && git reset --hard && git pull)
 mv .envrc .env
 docker compose up --build -d --remove-orphans
 
