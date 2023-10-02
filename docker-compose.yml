@@ -171,10 +171,10 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
+      - TZ
       - RAPIRA_BOOKS_DOWNLOAD_TO=/downloads
       - RAPIRA_BOOKS_TELEGRAM_BOT_TOKEN
       - RAPIRA_BOOKS_USERS
-      - TZ
     volumes:
       - /home/anton/bucket/torrents/books/inbox:/downloads
     restart: unless-stopped
