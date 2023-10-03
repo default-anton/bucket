@@ -8,7 +8,8 @@ SSH_PORT ?= "22"
 all: make_dirs deploy up
 
 make_dirs:
-	@ssh $(SSH_USER)@$(SSH_HOST) -p $(SSH_PORT) "mkdir -p $(ROOT_DIR)/bucket/{torrents,media}/{movies,tv}"
+	@ssh $(SSH_USER)@$(SSH_HOST) -p $(SSH_PORT) \
+		"mkdir -p $(ROOT_DIR)/bucket/{torrents,media}/{movies,tv} $(ROOT_DIR)/bucket/books/inbox"
 
 deploy:
 	@scp -P $(SSH_PORT) \
