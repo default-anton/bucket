@@ -1,4 +1,5 @@
 ROOT_DIR ?= "/home/bucket"
+EXTRA_DATA_DIR ?= "/mnt/data"
 SSH_USER ?= "bucket"
 SSH_HOST ?= "127.0.0.1"
 SSH_PORT ?= "22"
@@ -10,6 +11,8 @@ all: make_dirs deploy up
 make_dirs:
 	@ssh $(SSH_USER)@$(SSH_HOST) -p $(SSH_PORT) \
 		"mkdir -p $(ROOT_DIR)/bucket/{torrents,media}/{movies,tv} $(ROOT_DIR)/bucket/books/inbox"
+	@ssh $(SSH_USER)@$(SSH_HOST) -p $(SSH_PORT) \
+		"mkdir -p $(EXTRA_DATA_DIR)/{torrents,media}/{movies,tv,books}"
 
 deploy:
 	@scp -P $(SSH_PORT) \
