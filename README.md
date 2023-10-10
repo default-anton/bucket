@@ -27,8 +27,6 @@ Tweak the `docker-compose.yml` to your heart's content. Be sure to check out the
 
 The `docker-compose.yml` includes all the services you need to get your media stack up and running. From Jellyfin to qBittorrent, it's all here and ready to go!
 
-Thank you for pointing that out. I've identified the environment variables from the `docker-compose.yml` file, and included them in the revised 🚀 Quick Start section below:
-
 ## 🚀 Quick Start
 
 1. **Clone The Repo:**
