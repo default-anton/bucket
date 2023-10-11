@@ -121,6 +121,7 @@ services:
       - /home/anton/qbittorrent/config:/config
       - /home/anton/bucket/torrents:/data/torrents
       - /mnt/data/torrents:/data2/torrents
+      - /home/anton/bucket/on_torrent_finished.sh:/data2/on_torrent_finished.sh
     network_mode: "container:gluetun"
     restart: unless-stopped
     labels:
