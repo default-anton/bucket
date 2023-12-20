@@ -1,6 +1,39 @@
 version: "3.7"
 
 services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    environment:
+      - TZ
+      - WEBPASSWORD
+    volumes:
+       - '/home/anton/etc-pihole/:/etc/pihole/'
+       - '/home/anton/etc-dnsmasq.d/:/etc/dnsmasq.d/'
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.pihole.rule=Host(`pi.gg`)
+      - traefik.http.routers.pihole.entrypoints=web
+      - traefik.http.routers.pihole.service=pihole-service
+      - traefik.http.services.pihole-service.loadbalancer.server.port=80
+  traefik:
+    image: "traefik:v2.10"
+    container_name: "traefik"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    restart: unless-stopped
   jellyfin:
     container_name: jellyfin
     image: ghcr.io/hotio/jellyfin
@@ -11,8 +44,6 @@ services:
     devices:
       - /dev/dri/renderD128:/dev/dri/renderD128
       - /dev/kfd:/dev/kfd
-    ports:
-      - "8096:8096"
     environment:
       - PUID=1000
       - PGID=1000
@@ -24,8 +55,6 @@ services:
       - /home/anton/bucket/media:/data/media
       - /mnt/data/media:/data2/media
     restart: unless-stopped
-    labels:
-      - "autoheal=true"
     healthcheck:
       test: ["CMD-SHELL", "curl -Lk -fsS http://localhost:8096/health || exit 1"]
       interval: 10s
@@ -33,6 +62,13 @@ services:
       retries: 3
       start_period: 10s
       start_interval: 10s
+    labels:
+      - "autoheal=true"
+      - traefik.enable=true
+      - traefik.http.routers.jellyfin.rule=Host(`tv.gg`)
+      - traefik.http.routers.jellyfin.entrypoints=web
+      - traefik.http.routers.jellyfin.service=jellyfin-service
+      - traefik.http.services.jellyfin-service.loadbalancer.server.port=8096
   jellyseerr:
     container_name: jellyseerr
     image: ghcr.io/hotio/jellyseerr
@@ -132,12 +168,32 @@ services:
     image: qmcgaw/gluetun
     cap_add:
       - NET_ADMIN
-    ports:
-      - 5055:5055 # jellyseerr
-      - 7878:7878 # radarr
-      - 8989:8989 # sonarr
-      - 8080:8080 # qbittorrent
-      - 9696:9696 # prowlarr
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.jellyseerr.rule=Host(`req.gg`)
+      - traefik.http.routers.jellyseerr.entrypoints=web
+      - traefik.http.routers.jellyseerr.service=jellyseerr-service
+      - traefik.http.services.jellyseerr-service.loadbalancer.server.port=5055
+
+      - traefik.http.routers.radarr.rule=Host(`radarr.gg`)
+      - traefik.http.routers.radarr.entrypoints=web
+      - traefik.http.routers.radarr.service=radarr-service
+      - traefik.http.services.radarr-service.loadbalancer.server.port=7878
+
+      - traefik.http.routers.sonarr.rule=Host(`sonarr.gg`)
+      - traefik.http.routers.sonarr.entrypoints=web
+      - traefik.http.routers.sonarr.service=sonarr-service
+      - traefik.http.services.sonarr-service.loadbalancer.server.port=8989
+
+      - traefik.http.routers.qbittorrent.rule=Host(`torrents.gg`)
+      - traefik.http.routers.qbittorrent.entrypoints=web
+      - traefik.http.routers.qbittorrent.service=qbittorrent-service
+      - traefik.http.services.qbittorrent-service.loadbalancer.server.port=8080
+
+      - traefik.http.routers.prowlarr.rule=Host(`index.gg`)
+      - traefik.http.routers.prowlarr.entrypoints=web
+      - traefik.http.routers.prowlarr.service=prowlarr-service
+      - traefik.http.services.prowlarr-service.loadbalancer.server.port=9696
     environment:
       - VPN_SERVICE_PROVIDER=mullvad
       - VPN_TYPE=wireguard
@@ -168,9 +224,16 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ
+      - FB_BASE_URL=http://rapira.gg
     ports:
       - "8081:80"
     restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.filebrowser.rule=Host(`rapira.gg`)
+      - traefik.http.routers.filebrowser.entrypoints=web
+      - traefik.http.routers.filebrowser.service=filebrowser-service
+      - traefik.http.services.filebrowser-service.loadbalancer.server.port=80
   rapirabooks:
     container_name: rapirabooks
     build:
