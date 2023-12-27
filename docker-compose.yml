@@ -57,11 +57,10 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -Lk -fsS http://localhost:8096/health || exit 1"]
-      interval: 10s
-      timeout: 5s
+      interval: 5s
+      timeout: 3s
       retries: 3
       start_period: 10s
-      start_interval: 10s
     labels:
       - "autoheal=true"
       - traefik.enable=true
@@ -84,13 +83,12 @@ services:
     restart: unless-stopped
     labels:
       - "autoheal=true"
-    healthcheck: &default_healthcheck
-      test: ["CMD-SHELL", "ping -c1 $(echo $WIREGUARD_ADDRESSES | cut -d'/' -f1) || exit 1"]
-      interval: 10s
-      timeout: 5s
+    healthcheck:
+      test: ["CMD-SHELL", "curl -Lk -fsS http://localhost:5055/login || exit 1"]
+      interval: 5s
+      timeout: 3s
       retries: 3
       start_period: 10s
-      start_interval: 10s
   sonarr:
     container_name: sonarr
     image: ghcr.io/hotio/sonarr
@@ -108,7 +106,12 @@ services:
     restart: unless-stopped
     labels:
       - "autoheal=true"
-    healthcheck: *default_healthcheck
+    healthcheck:
+      test: ["CMD-SHELL", "curl -Lk -fsS http://localhost:8989/ping || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
   radarr:
     container_name: radarr
     image: ghcr.io/hotio/radarr
@@ -126,7 +129,12 @@ services:
     restart: unless-stopped
     labels:
       - "autoheal=true"
-    healthcheck: *default_healthcheck
+    healthcheck:
+      test: ["CMD-SHELL", "curl -Lk -fsS http://localhost:7878/ping || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
   prowlarr:
     container_name: prowlarr
     image: ghcr.io/hotio/prowlarr:nightly
@@ -142,7 +150,12 @@ services:
     restart: unless-stopped
     labels:
       - "autoheal=true"
-    healthcheck: *default_healthcheck
+    healthcheck:
+      test: ["CMD-SHELL", "curl -Lk -fsS http://localhost:9696/ping || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
   qbittorrent:
     container_name: qbittorrent
     image: lscr.io/linuxserver/qbittorrent:latest
@@ -162,7 +175,6 @@ services:
     restart: unless-stopped
     labels:
       - "autoheal=true"
-    healthcheck: *default_healthcheck
   gluetun:
     container_name: gluetun
     image: qmcgaw/gluetun
